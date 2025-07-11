@@ -1,43 +1,36 @@
 "use client";
 
-import {useMediaQuery} from "@/lib/useMediaQuery";
-import {motion} from "motion/react";
-import Image from "next/image";
+import {useGSAP} from "@gsap/react";
+import gsap from "gsap";
 
 export function Intro() {
-  const isMobile = useMediaQuery("(max-width: 1024px)");
+  useGSAP(() => {
+    gsap.from(".intro-content", {
+      y: "10%",
+      opacity: 0,
+      delay: 0.25,
+      duration: 0.25
+    });
+  });
 
   return (
-    <section className="flex min-h-dvh flex-col items-center justify-center gap-10 px-4 lg:flex-row lg:gap-20 lg:px-8">
-      <motion.div
-        suppressHydrationWarning
-        initial={{opacity: 0, y: isMobile ? 0 : "25%"}}
-        animate={{opacity: 1, y: 0}}
-        transition={{delay: 0.25, ease: "easeOut", type: "tween"}}
-      >
-        <h2 className="text-2xl font-medium">Frontend Web Developer</h2>
-        <h1 className="text-6xl font-extrabold tracking-tight lg:text-8xl lg:whitespace-nowrap">
-          Vasil Despov
-        </h1>
-        <p className="text-muted-foreground mt-5 max-w-lg">
-          I am a&nbsp;
-          <span className="text-accent-foreground font-bold">
-            Frontend developer
-          </span>
-          &nbsp;with 4+ years of experience focused on delivering seamless,
-          accessible and performant frontend solutions & web applications.
-          <br /> I love exploring the latest technologies and am highly flexible
-          and adaptive to new challenges.
+    <section className="bg-secondary text-secondary-foreground flex min-h-screen items-center px-5 lg:px-39">
+      <div className="intro-content flex flex-col gap-12">
+        <div className="flex flex-col gap-3">
+          <h2 className="text-muted-foreground text-2xl tracking-widest md:text-4xl">
+            FRONTEND DEVELOPER
+          </h2>
+          <h1 className="text-6xl font-semibold md:text-8xl md:whitespace-nowrap">
+            VASIL DESPOV
+          </h1>
+        </div>
+        <p className="max-w-3xl text-lg font-medium">
+          I am a Frontend Developer with 4+ years of professional experience.
+          With dedication to pixel-perfect details, accessibility and clean
+          code, I specialize in building responsive and performant web
+          applications.
         </p>
-      </motion.div>
-
-      <motion.div
-        initial={{opacity: 0}}
-        animate={{opacity: 1}}
-        transition={{delay: 0.25, ease: "easeOut", type: "tween"}}
-      >
-        <Image alt="developer" src="/hero.svg" width={500} height={500} />
-      </motion.div>
+      </div>
     </section>
   );
 }
