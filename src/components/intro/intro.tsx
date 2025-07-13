@@ -9,13 +9,14 @@ export function Intro() {
       y: "10%",
       opacity: 0,
       delay: 0.25,
-      duration: 0.25
+      duration: 0.25,
+      autoAlpha: 0
     });
-  });
+  }, []);
 
   return (
     <section className="bg-secondary text-secondary-foreground flex min-h-screen items-center px-5 lg:px-39">
-      <div className="intro-content flex flex-col gap-12">
+      <div className="intro-content invisible flex flex-col gap-12">
         <div className="flex flex-col gap-3">
           <h2 className="text-muted-foreground text-2xl tracking-widest md:text-4xl">
             FRONTEND DEVELOPER
