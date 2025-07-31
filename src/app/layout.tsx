@@ -10,12 +10,14 @@ export const metadata: Metadata = {
 
 const heading = Bebas_Neue({
   weight: "400",
-  variable: "--font-heading"
+  variable: "--font-heading",
+  subsets: ["latin"]
 });
 
 const body = Inter({
   weight: ["400", "700"],
-  variable: "--font-body"
+  variable: "--font-body",
+  subsets: ["latin"]
 });
 
 export default function RootLayout({
