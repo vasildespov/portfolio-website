@@ -4,6 +4,7 @@ import {useGSAP} from "@gsap/react";
 import {cva} from "class-variance-authority";
 import gsap from "gsap";
 import {SplitText} from "gsap/SplitText";
+import {useLenis} from "lenis/react";
 import {CodeXml, Mail} from "lucide-react";
 import {useRef} from "react";
 
@@ -40,40 +41,61 @@ export function Intro() {
   const subtitleRef = useRef(null);
   const copyRef = useRef(null);
   const buttonsRef = useRef(null);
+  const timelineRef = useRef<GSAPTimeline>(null);
+  const splitTitleRef = useRef<SplitText>(null);
+  const lenis = useLenis();
 
-  useGSAP(() => {
-    const {words} = SplitText.create(titleRef.current, {
-      type: "words,chars",
-      charsClass: "transition-opacity hover:opacity-80"
-    });
-    const {chars} = SplitText.create(subtitleRef.current, {
-      type: "chars",
-      mask: "chars"
-    });
+  useGSAP(
+    () => {
+      splitTitleRef.current?.revert();
+      splitTitleRef.current = SplitText.create(titleRef.current, {
+        type: "words,chars",
+        charsClass: "transition-opacity hover:opacity-80"
+      });
 
-    gsap
-      .timeline()
-      .from(words, {
-        y: "500px",
-        stagger: 0.1,
-        delay: 0.1
-      })
-      .from(chars, {
-        x: "-100px"
-      })
-      .to([titleRef.current, subtitleRef.current], {autoAlpha: 1}, 0)
-      .to(copyRef.current, {autoAlpha: 1})
-      .from(buttonsRef.current, {y: "15px"}, "<")
-      .to(buttonsRef.current, {autoAlpha: 1}, "<");
-  });
+      const {chars} = SplitText.create(subtitleRef.current, {
+        type: "chars",
+        mask: "chars"
+      });
+
+      const copySplit = SplitText.create(copyRef.current, {
+        type: "words",
+        mask: "words"
+      });
+
+      timelineRef.current = gsap
+        .timeline({
+          onStart: () => lenis?.stop(),
+          onComplete: () => lenis?.start()
+        })
+        .from(splitTitleRef.current.words, {
+          yPercent: 210,
+          stagger: 0.1,
+          delay: 0.1
+        })
+        .from(chars, {
+          xPercent: -100
+        })
+        .to([titleRef.current, subtitleRef.current], {autoAlpha: 1}, 0)
+        .to(copyRef.current, {autoAlpha: 1})
+        .fromTo(copySplit.words, {opacity: 0}, {opacity: 1, stagger: 0.01}, "<")
+        .fromTo(
+          buttonsRef.current,
+          {yPercent: 50},
+          {yPercent: 0, autoAlpha: 1},
+          "<0.25"
+        );
+    },
+    {dependencies: [lenis, titleRef]}
+  );
 
   return (
-    <section className="flex min-h-screen flex-col items-center justify-center px-5 lg:px-10">
+    <section className="flex min-h-screen flex-col items-center justify-center gap-4 px-5 lg:px-10">
       <div className="flex w-full flex-col overflow-hidden lg:items-center">
-        <span ref={subtitleRef} className="intro-subtitle mb-5 lg:mb-0">
+        <span ref={subtitleRef} className="intro-subtitle">
           frontend developer.
         </span>
-        <h1 ref={titleRef} className="intro-title mb-5 lg:mb-0">
+        <h1 ref={titleRef} className="intro-title">
           vasil despov
         </h1>
       </div>
@@ -85,7 +107,7 @@ export function Intro() {
       </p>
       <div
         ref={buttonsRef}
-        className="invisible mt-5 flex w-full gap-4 lg:justify-center"
+        className="invisible flex w-full gap-4 lg:justify-center"
       >
         <button className={button({type: "work"})}>
           <span className={buttonText({type: "work"})}>see my work</span>
