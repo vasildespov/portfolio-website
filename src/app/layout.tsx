@@ -1,7 +1,7 @@
 import "./globals.css";
 import {cn} from "@/lib/utils";
 import type {Metadata} from "next";
-import {Bebas_Neue, Inter} from "next/font/google";
+import {Bebas_Neue, Host_Grotesk} from "next/font/google";
 
 export const metadata: Metadata = {
   title: "Vasil Despov",
@@ -14,7 +14,7 @@ const heading = Bebas_Neue({
   subsets: ["latin"]
 });
 
-const body = Inter({
+const body = Host_Grotesk({
   weight: ["400", "700"],
   variable: "--font-body",
   subsets: ["latin"]

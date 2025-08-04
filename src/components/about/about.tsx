@@ -24,7 +24,7 @@ export function About() {
             const mask = document.createElement("span");
             mask.textContent = line.textContent;
             mask.className =
-              "mask text-neutral-content absolute left-0 top-0 w-full";
+              "mask text-base-content absolute left-0 top-0 w-full";
             line.appendChild(mask);
           }
 

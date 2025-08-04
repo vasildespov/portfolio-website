@@ -4,15 +4,14 @@ import {useGSAP} from "@gsap/react";
 import {cva} from "class-variance-authority";
 import gsap from "gsap";
 import {SplitText} from "gsap/SplitText";
-import {useLenis} from "lenis/react";
 import {CodeXml, Mail} from "lucide-react";
 import {useRef} from "react";
 
 const button = cva("relative flex justify-center overflow-hidden btn", {
   variants: {
     type: {
-      work: "group/work-btn btn-primary",
-      contact: "group/contact-btn btn-secondary"
+      work: "group/work-btn btn bg-base-content text-base-100",
+      contact: "group/contact-btn btn-neutral"
     }
   }
 });
@@ -43,51 +42,44 @@ export function Intro() {
   const buttonsRef = useRef(null);
   const timelineRef = useRef<GSAPTimeline>(null);
   const splitTitleRef = useRef<SplitText>(null);
-  const lenis = useLenis();
 
-  useGSAP(
-    () => {
-      splitTitleRef.current?.revert();
-      splitTitleRef.current = SplitText.create(titleRef.current, {
-        type: "words,chars",
-        charsClass: "transition-opacity hover:opacity-80"
-      });
+  useGSAP(() => {
+    splitTitleRef.current?.revert();
+    splitTitleRef.current = SplitText.create(titleRef.current, {
+      type: "words,chars",
+      charsClass: "transition-opacity hover:opacity-80"
+    });
 
-      const {chars} = SplitText.create(subtitleRef.current, {
-        type: "chars",
-        mask: "chars"
-      });
+    const {chars} = SplitText.create(subtitleRef.current, {
+      type: "chars",
+      mask: "chars"
+    });
 
-      const copySplit = SplitText.create(copyRef.current, {
-        type: "words",
-        mask: "words"
-      });
+    const copySplit = SplitText.create(copyRef.current, {
+      type: "words",
+      mask: "words"
+    });
 
-      timelineRef.current = gsap
-        .timeline({
-          onStart: () => lenis?.stop(),
-          onComplete: () => lenis?.start()
-        })
-        .from(splitTitleRef.current.words, {
-          yPercent: 210,
-          stagger: 0.1,
-          delay: 0.1
-        })
-        .from(chars, {
-          xPercent: -100
-        })
-        .to([titleRef.current, subtitleRef.current], {autoAlpha: 1}, 0)
-        .to(copyRef.current, {autoAlpha: 1})
-        .fromTo(copySplit.words, {opacity: 0}, {opacity: 1, stagger: 0.01}, "<")
-        .fromTo(
-          buttonsRef.current,
-          {yPercent: 50},
-          {yPercent: 0, autoAlpha: 1},
-          "<0.25"
-        );
-    },
-    {dependencies: [lenis, titleRef]}
-  );
+    timelineRef.current = gsap
+      .timeline()
+      .from(splitTitleRef.current.words, {
+        yPercent: 210,
+        stagger: 0.1,
+        delay: 0.1
+      })
+      .from(chars, {
+        xPercent: -100
+      })
+      .to([titleRef.current, subtitleRef.current], {autoAlpha: 1}, 0)
+      .to(copyRef.current, {autoAlpha: 1})
+      .fromTo(copySplit.words, {opacity: 0}, {opacity: 1, stagger: 0.01}, "<")
+      .fromTo(
+        buttonsRef.current,
+        {yPercent: 50},
+        {yPercent: 0, autoAlpha: 1},
+        "<"
+      );
+  });
 
   return (
     <section className="flex min-h-screen flex-col items-center justify-center gap-4 px-5 lg:px-10">
@@ -99,7 +91,7 @@ export function Intro() {
           vasil despov
         </h1>
       </div>
-      <p ref={copyRef} className="invisible w-full lg:text-center">
+      <p ref={copyRef} className="invisible w-full text-lg lg:text-center">
         4+ years of professional experience crafting responsive & performant web
         applications.
         <br /> Focused on clean code, accessibility, and pixel-perfect
